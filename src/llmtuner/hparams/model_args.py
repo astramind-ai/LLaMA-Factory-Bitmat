@@ -57,6 +57,18 @@ class ModelArguments:
         default=None,
         metadata={"help": "Device map used for loading the 4-bit quantized model, needs bitsandbytes>=0.43.0."},
     )
+    quant_to_158bit: bool = field(
+        default=False,
+        metadata={"help": "Whether or not to use 1.58-bit quantization for model pre-training."},
+    )
+    load_158bit_model: bool = field(
+        default=False,
+        metadata={"help": "Whether or not to load a 1.58-bit quantized model."},
+    )
+    model_158_type: Optional[Literal["mistral", "gemma", "llama"]] = field(
+        default=None,
+        metadata={"help": "Which model base to load."},
+    )
     rope_scaling: Optional[Literal["linear", "dynamic"]] = field(
         default=None,
         metadata={"help": "Which scaling strategy should be adopted for the RoPE embeddings."},
@@ -168,6 +180,10 @@ class ModelArguments:
 
         if self.adapter_name_or_path is not None:  # support merging multiple lora weights
             self.adapter_name_or_path = [path.strip() for path in self.adapter_name_or_path.split(",")]
+
+        if self.load_158bit_model and not self.model_158_type:
+            raise ValueError("`model_158_type` is necessary for loading 1.58-bit quantized model.")
+        assert not self.load_158bit_model and not self.quantization_bit, "Cannot load 1.58-bit model and quantize."
 
         assert self.quantization_bit in [None, 8, 4], "We only accept 4-bit or 8-bit quantization."
         assert self.export_quantization_bit in [None, 8, 4, 3, 2], "We only accept 2/3/4/8-bit quantization."

@@ -1,7 +1,7 @@
 from typing import TYPE_CHECKING, Any, Dict, Tuple
 
 from transformers import AutoConfig, AutoModelForCausalLM, AutoTokenizer
-from trl import AutoModelForCausalLMWithValueHead
+from trl import AutoModelForCausalLMWithValueHead # type: ignore
 
 from ..extras.logging import get_logger
 from ..extras.misc import count_parameters, get_current_device, try_download_model_from_ms
@@ -83,6 +83,14 @@ def load_model(
         if model_args.adapter_name_or_path:
             model_args.adapter_name_or_path = None
             logger.warning("Unsloth does not support loading adapters.")
+    elif is_trainable and model_args.quant_to_158bit:
+        assert finetuning_args.stage != 'pt', ("Quantization to 1.58-bit should be done to pretrain a model, not to "
+                                               "finetune it.")
+        assert finetuning_args.finetuning_type in ['freeze', 'full'], ("Quantization to 1.58-bit currently supports only "
+                                                                      "freeze or full training.")
+        from bitmat import convert_hf_model # type: ignore
+        model = AutoModelForCausalLM.from_pretrained(model_args.model_name_or_path, config=config, **init_kwargs)
+        model = convert_hf_model(model)
 
     if model is None:
         model = AutoModelForCausalLM.from_pretrained(model_args.model_name_or_path, config=config, **init_kwargs)

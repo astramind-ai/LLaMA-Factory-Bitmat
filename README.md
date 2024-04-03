@@ -45,7 +45,7 @@ Choose your path:
 
 - **Various models**: LLaMA, Mistral, Mixtral-MoE, Qwen, Yi, Gemma, Baichuan, ChatGLM, Phi, etc.
 - **Integrated methods**: (Continuous) pre-training, supervised fine-tuning, reward modeling, PPO, DPO and ORPO.
-- **Scalable resources**: 32-bit full-tuning, 16-bit freeze-tuning, 16-bit LoRA and 2/4/8-bit QLoRA via AQLM/AWQ/GPTQ/LLM.int8.
+- **Scalable resources**: 32-bit full-tuning, 16-bit freeze-tuning, 16-bit LoRA and 2/4/8-bit QLoRA via AQLM/AWQ/GPTQ/LLM.int8. 1.58Bit Training in now supported [**New Feature**].
 - **Advanced algorithms**: GaLore, DoRA, LongLoRA, LLaMA Pro, LoRA+, LoftQ and Agent tuning.
 - **Practical tricks**: FlashAttention-2, Unsloth, RoPE scaling, NEFTune and rsLoRA.
 - **Experiment monitors**: LlamaBoard, TensorBoard, Wandb, MLflow, etc.
@@ -67,6 +67,7 @@ Compared to ChatGLM's [P-Tuning](https://github.com/THUDM/ChatGLM2-6B/tree/main/
 </details>
 
 ## Changelog
+[??/??/??] 1.58 Bit Training and inference is now supported via **[custom triton kernels](https://github.com/astramind-ai/BitMat)**
 
 [24/03/31] We supported **[ORPO](https://arxiv.org/abs/2403.07691)**. See `examples/lora_single_gpu` for usage.
 
@@ -265,11 +266,12 @@ huggingface-cli login
 | trl          | 0.8.1   | 0.8.1     |
 
 | Optional     | Minimum | Recommend |
-| ------------ | ------- | --------- |
+|--------------|---------|-----------|
 | CUDA         | 11.6    | 12.2      |
 | deepspeed    | 0.10.0  | 0.14.0    |
 | bitsandbytes | 0.39.0  | 0.43.0    |
 | flash-attn   | 2.3.0   | 2.5.6     |
+| bitmat-tl    | 0.2.3   | 0.2.3     |
 
 ### Hardware Requirement
 

@@ -30,6 +30,7 @@ extra_require = {
     "aqlm": ["aqlm[gpu]>=1.1.0"],
     "qwen": ["tiktoken", "transformers_stream_generator"],
     "quality": ["ruff"],
+    "bitmat": ["bitmat-tl", "triton", "bitsandbytes"],
 }
 
 
